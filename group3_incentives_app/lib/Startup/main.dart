@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'home_page.dart';
+
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -36,31 +38,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Bonvoyage',
-        theme: Themes.themeData['Lavender'],
-    );
-  }
-}
 
