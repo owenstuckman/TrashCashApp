@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:group3_incentives_app/Transactions/transactions.dart';
 
+import '../Account-Settings/Account.dart';
+import '../Account-Settings/Settings.dart';
+import '../Shop/shop.dart';
+
 
 GlobalKey homeKey = GlobalKey();
 
@@ -30,7 +34,8 @@ class _HomePageState extends State<HomePage> {
         },
         children: [
           // need to input pages here
-          Transactions()
+          Transactions(),
+          Shop()
         ],
       ),
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -53,10 +58,22 @@ class _HomePageState extends State<HomePage> {
                 color: Theme.of(context).colorScheme.onSurface, size: 32),
             onPressed: () {
               // Need to readd when profiles page is added
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => Profiles()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Account()));
             },
           ),
         ),
+        Positioned(
+          top: 14,
+          left: 0,
+          child: IconButton(
+            icon: Icon(Icons.settings_rounded,
+                color: Theme.of(context).colorScheme.onSurface, size: 32),
+            onPressed: () {
+              // Need to readd when profiles page is added
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
+            },
+          ),
+        )
       ],
     );
   }
@@ -108,12 +125,4 @@ class _HomePageState extends State<HomePage> {
 }
 
 
-class AccountPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Account')),
-      body: Center(child: Text('Account Page')),
-    );
-  }
-}
+
