@@ -10,8 +10,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 final SupabaseClient supabase = Supabase.instance.client;
 class DataBase {
 
-  // lists and maps to pass data to, currently just samples
-  static int acccount_points = 0;
+  // lists and maps to pass data to
+  static List<Map> scanned_items = [];
+  static Map items_information = {};
 
   // initialization of db
   static Future<void> init() async {
@@ -32,15 +33,26 @@ class DataBase {
       return true;
     }
   }
+
   // get points for a given hokieP
   static Future<int> getPoints(int hokieP) async {
     final points = await supabase.from('Accounts').select().eq('hokieP', hokieP);
     return points as int;
   }
+
   // update total amount of points for a hokieP
   static Future<int> updatePointTotal(int hokieP, int pointTotal) async {
     final points = await supabase.from('Accounts').update({'points' : pointTotal}).eq('hokieP', hokieP);
     return points as int;
   }
+
+  // get scanned items for a given hokieP
+  static Future<void> getScannedItems(int hokieP) async {
+    scanned_items = await supabase.from('ScannedItems').select().eq('hokieP', hokieP);
+  }
   
+  // get info for a set item -> use getscanneditems to get items scanned
+  static Future<void> getItemInformation(String barcodeID) async {
+    items_information = (await supabase.from('ItemsKickbacks').select().eq('barcodeID', barcodeID)) as Map;
+  }
 }
