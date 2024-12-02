@@ -11,7 +11,7 @@ final SupabaseClient supabase = Supabase.instance.client;
 class DataBase {
 
   // lists and maps to pass data to, currently just samples
-  static List<Map<String, dynamic>> ideas = [];
+  static int acccount_points = 0;
 
   // initialization of db
   static Future<void> init() async {
@@ -31,6 +31,11 @@ class DataBase {
     } catch(e){
       return true;
     }
+  }
+
+  static Future<int> getPoints(int hokieP) async {
+    final points = await supabase.from('Accounts').select().eq('hokieP', hokieP);
+    return points as int;
   }
   
 }
