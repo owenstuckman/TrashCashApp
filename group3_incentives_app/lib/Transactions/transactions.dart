@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
  */
 
 class Transactions extends StatelessWidget {
-  // sample data
-  final List<Map<String, dynamic>> destinations = [
+  // Mark the destinations list as static const since it's compile-time constant data
+  static const List<Map<String, dynamic>> destinations = [
     {
       'imageUrl': 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c1/Cloud_Gate_%28The_Bean%29_from_east%27.jpg/340px-Cloud_Gate_%28The_Bean%29_from_east%27.jpg',
       'placeName': 'Cloud Gate "The Bean"',
@@ -45,6 +45,8 @@ class Transactions extends StatelessWidget {
       'numberOfPeople': 60
     },
   ];
+
+  const Transactions({super.key});
 
   @override
   Widget build(BuildContext context) {

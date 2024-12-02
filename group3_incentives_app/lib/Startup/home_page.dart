@@ -1,126 +1,163 @@
 import 'package:flutter/material.dart';
-import 'package:group3_incentives_app/Transactions/transactions.dart';
+import 'package:provider/provider.dart';
+import '../models/user_points.dart';
 
-import '../Account-Settings/Account.dart';
-import '../Account-Settings/Settings.dart';
-import '../Shop/shop.dart';
-
-
-GlobalKey homeKey = GlobalKey();
-
-class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: homeKey);
-  @override
-  State<HomePage> createState() => _HomePageState();
-
-}
-
-class _HomePageState extends State<HomePage> {
-  int pageIndex = 3;
-  final PageController pageController = PageController();
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: pageController,
-        physics: pageIndex == 0
-            ? NeverScrollableScrollPhysics()
-            : ClampingScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() {
-            pageIndex = index;
-          });
-        },
-        children: [
-          // need to input pages here
-          Transactions(),
-          Shop()
-        ],
+      appBar: AppBar(
+        title: const Text('My Profile'),
       ),
-      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
-      floatingActionButton: _buildTopBar(context),
-      extendBody: true,
-      bottomNavigationBar: _buildNavBar(context),
-    );
-  }
+      body: Consumer<UserPoints>(
+        builder: (context, userPoints, child) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                // Profile Header with VT Colors
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(24),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF861F41), Color(0xFFE87722)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      const CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(
+                          'https://brand.vt.edu/content/brand_vt_edu/en/licensing/university-trademarks/athletic-trademark/_jcr_content/content/textimage/image.transform/m-medium/image.jpg',
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Hokie Student',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'hokie@vt.edu',
+                        style: TextStyle(
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
-  // Builds the top bar with settings and account icons
-  Stack _buildTopBar(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          top: 14,
-          left: 10,
-          child: IconButton(
-            icon: Icon(Icons.account_circle,
-                color: Theme.of(context).colorScheme.onSurface, size: 32),
-            onPressed: () {
-              // Need to readd when profiles page is added
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Account()));
-            },
-          ),
-        ),
-        Positioned(
-          top: 14,
-          left: 0,
-          child: IconButton(
-            icon: Icon(Icons.settings_rounded,
-                color: Theme.of(context).colorScheme.onSurface, size: 32),
-            onPressed: () {
-              // Need to readd when profiles page is added
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
-            },
-          ),
-        )
-      ],
-    );
-  }
+                // Stats Section
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildStatCard('Total Points', '${userPoints.points}'),
+                      _buildStatCard('Level', userPoints.points >= 1000 ? 'Gold' : 'Silver'),
+                      _buildStatCard('Activities', '${userPoints.activities.length}'),
+                    ],
+                  ),
+                ),
 
-  // Builds the bottom navigation bar
-  Container _buildNavBar(BuildContext context) {
-    Color iconColor = Theme.of(context).colorScheme.onSurfaceVariant;
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.home_outlined, 0, iconColor),
-          _buildNavItem(Icons.location_on_sharp, 1, iconColor),
-          _buildNavItem(Icons.search, 2, iconColor),
-          _buildNavItem(Icons.message_outlined, 3, iconColor),
-          _buildNavItem(Icons.account_circle_sharp, 4, iconColor),
-        ],
-      ),
-    );
-  }
-
-  // Builds individual navigation bar item
-  IconButton _buildNavItem(IconData icon, int index, Color iconColor) {
-    return IconButton(
-      icon: Icon(
-        icon,
-        color: iconColor,
-        size: pageIndex == index ? 35 : 27,
-      ),
-      onPressed: () {
-        setState(() {
-          pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut,
+                // Recent Activity Section
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Recent Activity',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF861F41),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Show actual activities from state
+                      ...userPoints.activities.take(3).map((activity) =>
+                        _buildActivityItem(
+                          activity.title,
+                          activity.points,
+                          _formatTimestamp(activity.timestamp),
+                        ),
+                      ).toList(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
-        });
-      },
+        },
+      ),
     );
+  }
+
+  Widget _buildStatCard(String label, String value) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF861F41),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActivityItem(String title, String points, String time) {
+    final bool isPositive = points.startsWith('+');
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        title: Text(title),
+        subtitle: Text(time),
+        trailing: Text(
+          points,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isPositive ? Colors.green : const Color(0xFF861F41),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _formatTimestamp(DateTime timestamp) {
+    final difference = DateTime.now().difference(timestamp);
+    if (difference.inHours < 24) {
+      return difference.inHours == 0 
+          ? 'Just now'
+          : '${difference.inHours} hours ago';
+    } else if (difference.inDays < 2) {
+      return 'Yesterday';
+    } else {
+      return '${difference.inDays} days ago';
+    }
   }
 }
 
