@@ -32,9 +32,14 @@ class DataBase {
       return true;
     }
   }
-
+  // get points for a given hokieP
   static Future<int> getPoints(int hokieP) async {
     final points = await supabase.from('Accounts').select().eq('hokieP', hokieP);
+    return points as int;
+  }
+  // update total amount of points for a hokieP
+  static Future<int> updatePointTotal(int hokieP, int pointTotal) async {
+    final points = await supabase.from('Accounts').update({'points' : pointTotal}).eq('hokieP', hokieP);
     return points as int;
   }
   
