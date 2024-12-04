@@ -8,8 +8,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _hokieIdController = TextEditingController();
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
 
@@ -18,8 +17,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+    _hokieIdController.dispose();
     super.dispose();
   }
 
@@ -79,48 +77,25 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    // Email Field
+                    // Hokie ID Field
                     TextFormField(
-                      controller: _emailController,
+                      controller: _hokieIdController,
                       decoration: InputDecoration(
-                        hintText: 'pid@vt.edu',
+                        hintText: 'Enter your 9-digit Hokie ID',
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
-                        prefixIcon: const Icon(Icons.email, color: vtMaroon),
+                        prefixIcon: const Icon(Icons.person, color: vtMaroon),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your VT email';
+                          return 'Please enter your Hokie ID';
                         }
-                        if (!value.endsWith('@vt.edu')) {
-                          return 'Please use your VT email (@vt.edu)';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Password Field
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        prefixIcon: const Icon(Icons.lock, color: vtMaroon),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                        if (value.length != 9 || int.tryParse(value) == null) {
+                          return 'Hokie ID must be a 9-digit number';
                         }
                         return null;
                       },

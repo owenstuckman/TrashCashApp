@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class UserPoints extends ChangeNotifier {
-  int _points = 1234;  // Starting points
+  int _points = 5000;  // Starting points
   List<ActivityItem> _activities = [];
 
   int get points => _points;

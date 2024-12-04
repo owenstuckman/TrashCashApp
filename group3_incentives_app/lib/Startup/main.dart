@@ -4,6 +4,7 @@ import 'activity_page.dart';
 import 'rewards_page.dart';
 import 'package:provider/provider.dart';
 import '../models/user_points.dart';
+import 'login_page.dart'; // Import the LoginPage
 
 void main() {
   runApp(const MyApp());
@@ -17,11 +18,16 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => UserPoints(),
       child: MaterialApp(
+        title: 'Virginia Tech App',
         theme: ThemeData(
           primaryColor: const Color(0xFF861F41), // VT Maroon
           scaffoldBackgroundColor: Colors.grey[100],
         ),
-        home: const MainNavigationPage(),
+        initialRoute: '/', // Set the initial route
+        routes: {
+          '/': (context) => const LoginPage(), // Set LoginPage as the home page
+          '/home': (context) => const MainNavigationPage(), // Define your home page route
+        },
       ),
     );
   }

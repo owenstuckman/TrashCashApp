@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 
 /*
   Serves currently as sample page
  */
 
-class Account extends StatelessWidget {
-  // Changed from final to static const
+class Transactions extends StatelessWidget {
+  // Mark the destinations list as static const since it's compile-time constant data
   static const List<Map<String, dynamic>> destinations = [
     {
       'imageUrl': 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c1/Cloud_Gate_%28The_Bean%29_from_east%27.jpg/340px-Cloud_Gate_%28The_Bean%29_from_east%27.jpg',
@@ -46,44 +46,32 @@ class Account extends StatelessWidget {
     },
   ];
 
-  // New field for student ID
-  final String studentId;
-
-  // Updated constructor to include studentId
-  const Account({super.key, required this.studentId});
+  const Transactions({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 45.0), // Add padding to the top
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Explore with Marriott'),
-        ),
-        body: SafeArea( // Add SafeArea to prevent overlap with system UI
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Best Destinations',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
-              // Display the student ID
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Student ID: $studentId',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              // ... existing widgets ...
-            ],
+        padding: const EdgeInsets.only(top: 45.0), // Add padding to the top
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Explore with Marriott'),
           ),
-        ),
-      ),
+          body: SafeArea( // Add SafeArea to prevent overlap with system UI
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Best Destinations',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        )
     );
   }
 }
